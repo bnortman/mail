@@ -16,7 +16,7 @@ plugins {
     id "com.jfrog.bintray" version "1.2"
 }
 
-version "2.0.0.BUILD-SNAPSHOT"
+version "3.2.4.1"
 group "org.grails.plugins"
 
 apply plugin: 'maven-publish'
@@ -33,6 +33,7 @@ apply plugin: "org.grails.grails-doc"
 ext {
     grailsVersion = project.grailsVersion
     gradleWrapperVersion = project.gradleWrapperVersion
+    artifactRepoBase = "https://nexus.spireon.com/nexus/content/repositories"
 }
 
 sourceCompatibility = 1.8
@@ -73,4 +74,19 @@ dependencies {
 
 task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion
+}
+
+
+
+publishing {
+    repositories {
+        maven {
+            name "spireon"
+            url "${artifactRepoBase}/${project.version.endsWith('-SNAPSHOT') ? 'spireon-snapshot' : 'spireon-release'}"
+            credentials {
+                username nexusUsername
+                password nexusPassword
+            }
+        }
+    }
 }
